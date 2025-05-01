@@ -230,13 +230,17 @@
         tableConfig.buttons.push({
             text: 'Add New Blog',
             className: 'add-new btn btn-primary',
-            attr: {
-                'data-bs-toggle': 'modal',
-                'data-bs-target': '#inlineForm'
-            },
+            // attr: {
+            //     'data-bs-toggle': 'modal',
+            //     'data-bs-target': '#inlineForm'
+            // },
             init: function(api, node, config) {
                 $(node).removeClass('btn-secondary');
             }
+        });
+
+        $(document).on("click",".add-new",function() {
+            $(location).prop('href', "{{ route('blogs.create') }}");
         });
         var table = $('.datatables-basic').DataTable(tableConfig);
 

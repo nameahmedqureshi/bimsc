@@ -230,10 +230,10 @@
         tableConfig.buttons.push({
             text: 'Add New Service',
             className: 'add-new btn btn-primary',
-            attr: {
-                'data-bs-toggle': 'modal',
-                'data-bs-target': '#inlineForm'
-            },
+            // attr: {
+            //     'data-bs-toggle': 'modal',
+            //     'data-bs-target': '#inlineForm'
+            // },
             init: function(api, node, config) {
                 $(node).removeClass('btn-secondary');
             }
