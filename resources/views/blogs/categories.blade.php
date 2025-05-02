@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Services')
+@section('title', 'Blog Categories')
 @section('page-styles')
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -46,140 +46,29 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Client</th>
-                                            <th>Total</th>
-                                            <th class="text-truncate">Issued Date</th>
-                                            <th>Balance</th>
-                                            <th>Invoice Status</th>
+                                            <th>Category</th>
                                             <th class="cell-fit">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>#5089</td>
-                                            <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar bg-light-primary me-1">
-                                                        <span class="avatar-content">AB</span>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">Apple Brothers</span>
-                                                        <small class="text-muted">apple@example.com</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>$1,299</td>
-                                            <td>15 Jan 2023</td>
-                                            <td>$0</td>
-                                            <td><span class="badge rounded-pill bg-success">Paid</span></td>
+                                            
+                                            <td class="cat_name">Creative</td>                                            
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-body"><i data-feather="download" class="me-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="edit" class="mx-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="trash"></i></a>
+                                                   
+                                                    <a href="#!" class="item-edit "  data-bs-toggle= "modal" data-bs-target= "#inlineForm" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit value Detail">
+                                                        <i data-feather='edit'></i>
+                                                    </a>
+
+                                                    <a href="#!" class="delete-record" data-id="" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete value">
+                                                        <i data-feather='trash-2'></i>
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>#5088</td>
-                                            <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar bg-light-warning me-1">
-                                                        <span class="avatar-content">TC</span>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">Tech Corp</span>
-                                                        <small class="text-muted">tech@example.com</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>$2,499</td>
-                                            <td>12 Jan 2023</td>
-                                            <td>$499</td>
-                                            <td><span class="badge rounded-pill bg-warning">Pending</span></td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-body"><i data-feather="download" class="me-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="edit" class="mx-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="trash"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>#5087</td>
-                                            <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar bg-light-info me-1">
-                                                        <span class="avatar-content">DS</span>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">Digital Solutions</span>
-                                                        <small class="text-muted">digital@example.com</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>$899</td>
-                                            <td>10 Jan 2023</td>
-                                            <td>$0</td>
-                                            <td><span class="badge rounded-pill bg-success">Paid</span></td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-body"><i data-feather="download" class="me-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="edit" class="mx-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="trash"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>#5086</td>
-                                            <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar bg-light-danger me-1">
-                                                        <span class="avatar-content">MW</span>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">Media World</span>
-                                                        <small class="text-muted">media@example.com</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>$1,599</td>
-                                            <td>05 Jan 2023</td>
-                                            <td>$0</td>
-                                            <td><span class="badge rounded-pill bg-success">Paid</span></td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-body"><i data-feather="download" class="me-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="edit" class="mx-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="trash"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>#5085</td>
-                                            <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar bg-light-secondary me-1">
-                                                        <span class="avatar-content">GC</span>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">Global Corp</span>
-                                                        <small class="text-muted">global@example.com</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>$3,299</td>
-                                            <td>02 Jan 2023</td>
-                                            <td>$1,299</td>
-                                            <td><span class="badge rounded-pill bg-danger">Overdue</span></td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <a href="#" class="text-body"><i data-feather="download" class="me-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="edit" class="mx-1"></i></a>
-                                                    <a href="#" class="text-body"><i data-feather="trash"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                       
                                     </tbody>
                                 </table>
                             </div>
@@ -188,6 +77,32 @@
                 </div>
                 <!--/ List DataTable -->
             </section>
+
+            <!-- Modal -->
+            <div class="modal fade text-start" id="inlineForm" tabindex="-1" aria-labelledby="myModalLabel33" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel33">Category</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form class="add_category">
+                            <div class="modal-body">
+                                <label>Category: </label>
+                                <div class="mb-1">
+                                    <input type="text" name="category" placeholder="Add Category" class="form-control category" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="hidden" class="old_cat" name="old_cat" value="">
+                                <input type="hidden" name="cat_type" value="">
+                                <input type="hidden" name="action" value="add_category">
+                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -207,6 +122,7 @@
     <script src="{{ asset('/app-assets/vendors/js/tables/datatable/pdfmake.min.js') }}"></script>
     <script src="{{ asset('/app-assets/vendors/js/tables/datatable/vfs_fonts.js') }}"></script>
     <script src="{{ asset('/app-assets/vendors/js/tables/datatable/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('/app-assets/js/scripts/components/components-modals.js') }}"></script>
     <!-- END: Page JS-->
     <script>
          var tableConfig = {
@@ -228,8 +144,8 @@
         };
 
         tableConfig.buttons.push({
-            text: 'Add New Service',
-            className: 'add-new btn btn-primary',
+            text: 'Add New Category',
+            className: 'add-new btn btn-primary add-cat-modal',
             attr: {
                 'data-bs-toggle': 'modal',
                 'data-bs-target': '#inlineForm'
@@ -239,6 +155,15 @@
             }
         });
         var table = $('.datatables-basic').DataTable(tableConfig);
+
+        $(document).on("click", ".item-edit", function(e) {
+            var cat_name = $(this).parents('tr').find('.cat_name').text();
+            $('.category, .old_cat').val(cat_name);
+        });
+
+        $(document).on("click", ".add-cat-modal", function(e) {
+            $('.category').val('');
+        });
 
     </script>
 @endsection

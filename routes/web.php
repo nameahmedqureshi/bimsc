@@ -1,18 +1,26 @@
 <?php
+
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ServicesController;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
 //Blogs
-Route::prefix('blogs')->name('blogs.')->group(function () {
+Route::prefix('blogs')->name('blogs.')->middleware('auth')->group(function () {
 
     // List all blogs
     Route::get('/', [BlogController::class, 'index'])->name('index');
@@ -41,7 +49,7 @@ Route::prefix('blogs')->name('blogs.')->group(function () {
 });
 
 //Services
-Route::prefix('services')->name('service.')->group(function () {
+Route::prefix('services')->name('service.')->middleware('auth')->group(function () {
 
     // List all Services
     Route::get('/', [ServicesController::class, 'index'])->name('index');
@@ -65,3 +73,5 @@ Route::prefix('services')->name('service.')->group(function () {
     Route::delete('/{id}', [ServicesController::class, 'destroy'])->name('destroy');
 
 });
+
+require __DIR__.'/auth.php';

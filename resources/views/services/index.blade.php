@@ -238,6 +238,10 @@
                 $(node).removeClass('btn-secondary');
             }
         });
+        $(document).on("click",".add-new",function() {
+            $(location).prop('href', "{{ route('service.create') }}");
+        });
+
         var table = $('.datatables-basic').DataTable(tableConfig);
 
     </script>

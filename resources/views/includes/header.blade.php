@@ -12,6 +12,9 @@
     .dark-layout .navbar-light a.back_home {
         color: #fff;
     }
+    button.logout {
+        padding: 5px 20px !important;
+    }
 </style>
 <nav class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-light navbar-shadow container-xxl">
         <div class="navbar-container d-flex content">
@@ -31,15 +34,20 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
                        
-                        <a class="dropdown-item" href="" >
+                        <!-- <a class="dropdown-item" href="" >
                             <i class="me-50" data-feather="settings"></i> 
                             Settings
-                        </a>
-                       
-                        <a class="dropdown-item" href="">
+                        </a> -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item logout" style="background: none; border: none; padding: 0; margin: 0;">
+                                <i class="me-50" data-feather="power"></i> Logout
+                            </button>
+                        </form>
+                        <!-- <a class="dropdown-item" href="{{ route('logout') }}">
                             <i class="me-50" data-feather="power"></i> 
                             Logout
-                        </a>
+                        </a> -->
                     </div>
                 </li>
             </ul>
