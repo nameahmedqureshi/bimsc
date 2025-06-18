@@ -5,6 +5,18 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/forgot-password', function () {
+    return view('auth.forgotpassword');
+})->name('forgot-password');
+
+Route::get('/reset-password', function () {
+    return view('auth.resetpassword');
+})->name('reset-password');
+
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
