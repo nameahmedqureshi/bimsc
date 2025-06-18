@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Blog Categories')
+@section('title', 'Blogs')
 @section('page-styles')
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -11,6 +11,11 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/app-assets/vendors/css/tables/datatable/buttons.bootstrap5.min.css') }}">
     <!-- END: Page CSS-->
     <style>
+        .avatar img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
         .dt-buttons button {
             border: 1px solid #82868b !important;
             background-color: transparent;
@@ -45,30 +50,44 @@
                                 <table class="datatables-basic table">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Category</th>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Role</th>
+                                            <th>Created at</th>
                                             <th class="cell-fit">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>#5089</td>
-                                            
-                                            <td class="cat_name">Creative</td>                                            
+                                            <td>
+                                                <div class="d-flex justify-content-left align-items-center">
+                                                    <div class="avatar bg-light-primary me-1">
+                                                        <span class="avatar-content">AB</span>
+                                                    </div>
+                                                    <div class="d-flex flex-column">
+                                                        <span class="fw-bold">Apple Brothers</span>
+                                                        <small class="text-muted">apple@example.com</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>Client</td>
+                                            <td>15 Jan 2023</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                   
-                                                    <a href="#!" class="item-edit "  data-bs-toggle= "modal" data-bs-target= "#inlineForm" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Edit value Detail">
-                                                        <i data-feather='edit'></i>
+                                                    <a href="{{ route('admin.user.edit', 1) }}" class="text-body">
+                                                        <i data-feather="edit" class="mx-1"></i>
                                                     </a>
-
-                                                    <a href="#!" class="delete-record" data-id="" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="Delete value">
-                                                        <i data-feather='trash-2'></i>
-                                                    </a>
+                                                    <form action="{{ route('admin.user.destroy', 1) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-link text-body p-0" onclick="return confirm('Are you sure?')">
+                                                            <i data-feather="trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
-                                       
                                     </tbody>
                                 </table>
                             </div>
@@ -77,32 +96,6 @@
                 </div>
                 <!--/ List DataTable -->
             </section>
-
-            <!-- Modal -->
-            <div class="modal fade text-start" id="inlineForm" tabindex="-1" aria-labelledby="myModalLabel33" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myModalLabel33">Category</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form class="add_category">
-                            <div class="modal-body">
-                                <label>Category: </label>
-                                <div class="mb-1">
-                                    <input type="text" name="category" placeholder="Add Category" class="form-control category" />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <input type="hidden" class="old_cat" name="old_cat" value="">
-                                <input type="hidden" name="cat_type" value="">
-                                <input type="hidden" name="action" value="add_category">
-                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>
@@ -122,7 +115,6 @@
     <script src="{{ asset('/app-assets/vendors/js/tables/datatable/pdfmake.min.js') }}"></script>
     <script src="{{ asset('/app-assets/vendors/js/tables/datatable/vfs_fonts.js') }}"></script>
     <script src="{{ asset('/app-assets/vendors/js/tables/datatable/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('/app-assets/js/scripts/components/components-modals.js') }}"></script>
     <!-- END: Page JS-->
     <script>
          var tableConfig = {
@@ -144,26 +136,21 @@
         };
 
         tableConfig.buttons.push({
-            text: 'Add New Category',
-            className: 'add-new btn btn-primary add-cat-modal',
-            attr: {
-                'data-bs-toggle': 'modal',
-                'data-bs-target': '#inlineForm'
-            },
+            text: 'Add New User',
+            className: 'add-new btn btn-primary',
+            // attr: {
+            //     'data-bs-toggle': 'modal',
+            //     'data-bs-target': '#inlineForm'
+            // },
             init: function(api, node, config) {
                 $(node).removeClass('btn-secondary');
             }
         });
+
+        $(document).on("click",".add-new",function() {
+            $(location).prop('href', "{{ route('admin.user.create') }}");
+        });
         var table = $('.datatables-basic').DataTable(tableConfig);
-
-        $(document).on("click", ".item-edit", function(e) {
-            var cat_name = $(this).parents('tr').find('.cat_name').text();
-            $('.category, .old_cat').val(cat_name);
-        });
-
-        $(document).on("click", ".add-cat-modal", function(e) {
-            $('.category').val('');
-        });
 
     </script>
 @endsection

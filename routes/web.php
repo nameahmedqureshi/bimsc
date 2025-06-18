@@ -1,22 +1,17 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\ServicesController;
+use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    }
-    return redirect()->route('login');
-});
-
-Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->name('dashboard');
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -24,59 +19,25 @@ Route::get('/dashboard', function () {
 //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 // });
 
-//Blogs
-Route::prefix('blogs')->name('blogs.')->middleware('auth')->group(function () {
+//Clients
+Route::prefix('admin')->name('admin.')->group(function () {
 
-    // List all blogs
-    Route::get('/', [BlogController::class, 'index'])->name('index');
-
-    // List all blogs categories
-    Route::get('/categories', [BlogController::class, 'showCategories'])->name('categories');
-
-    // List all blogs tags
-    Route::get('/tags', [BlogController::class, 'showTags'])->name('tags');
+    // List all users
+    Route::get('/users', [UsersController::class, 'index'])->name('user.index');
 
     // Show create form
-    Route::get('/create', [BlogController::class, 'create'])->name('create');
+    Route::get('/users/create', [UsersController::class, 'create'])->name('user.create');
 
-    // Store blog
-    Route::post('/', [BlogController::class, 'store'])->name('store');
+    // Store users
+    Route::post('/', [UsersController::class, 'store'])->name('user.store');
 
     // Show edit form
-    Route::get('/{id}/edit', [BlogController::class, 'edit'])->name('edit');
+    Route::get('/users/{id}/edit', [UsersController::class, 'edit'])->name('user.edit');
 
-    // Update blog
-    Route::put('/{id}', [BlogController::class, 'update'])->name('update');
+    // Update users
+    Route::put('/users/{id}', [UsersController::class, 'update'])->name('user.update');
 
-    // Delete blog
-    Route::delete('/{id}', [BlogController::class, 'destroy'])->name('destroy');
-
-});
-
-//Services
-Route::prefix('services')->name('service.')->middleware('auth')->group(function () {
-
-    // List all Services
-    Route::get('/', [ServicesController::class, 'index'])->name('index');
-
-    // List all service categories
-    Route::get('/categories', [ServicesController::class, 'showCategories'])->name('categories');
-
-    // Show service form
-    Route::get('/create', [ServicesController::class, 'create'])->name('create');
-
-    // Store service
-    Route::post('/', [ServicesController::class, 'store'])->name('store');
-
-    // Show service form
-    Route::get('/{id}/edit', [ServicesController::class, 'edit'])->name('edit');
-
-    // Update service
-    Route::put('/{id}', [ServicesController::class, 'update'])->name('update');
-
-    // Delete service
-    Route::delete('/{id}', [ServicesController::class, 'destroy'])->name('destroy');
+    // Delete users
+    Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('user.destroy');
 
 });
-
-require __DIR__.'/auth.php';

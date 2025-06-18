@@ -1,7 +1,7 @@
 
 <head>
 
-    <title>Julianna Moda</title>
+    <title>OneBase</title>
     <link rel="icon" type="image/x-icon" href="	https://devu11.testdevlink.net/heather/wp-content/uploads/2024/05/Logo.png">
     <!-- BEGIN: Vendor CSS-->
  
@@ -34,7 +34,9 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('/assets/css/style.css') }}">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/waitme@1.19.0/waitMe.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
     <!-- END: Custom CSS-->
 
     <script>
