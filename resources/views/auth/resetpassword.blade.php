@@ -70,13 +70,16 @@
                                 <h4 class="card-title mb-1">Reset Password 🔒</h4>
                                 <p class="card-text mb-2">Your new password must be different from previously used passwords</p>
 
-                                <form class="auth-reset-password-form mt-2" action="auth-login-basic.html" method="POST">
+                                <form class="auth-reset-password-form mt-2" id="resetForm">
+                                    @csrf
+                                    <input type="hidden" name="email" value="{{ request()->get('email') }}">
+                                    <input type="hidden" name="token" value="{{ request()->get('token') }}">
                                     <div class="mb-1">
                                         <div class="d-flex justify-content-between">
                                             <label class="form-label" for="reset-password-new">New Password</label>
                                         </div>
                                         <div class="input-group input-group-merge form-password-toggle">
-                                            <input type="password" class="form-control form-control-merge" id="reset-password-new" name="reset-password-new" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="reset-password-new" tabindex="1" autofocus />
+                                            <input type="password" class="form-control form-control-merge" id="reset-password-new" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="reset-password-new" tabindex="1" autofocus />
                                             <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
                                         </div>
                                     </div>
@@ -85,11 +88,11 @@
                                             <label class="form-label" for="reset-password-confirm">Confirm Password</label>
                                         </div>
                                         <div class="input-group input-group-merge form-password-toggle">
-                                            <input type="password" class="form-control form-control-merge" id="reset-password-confirm" name="reset-password-confirm" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="reset-password-confirm" tabindex="2" />
+                                            <input type="password" class="form-control form-control-merge" id="reset-password-confirm" name="password_confirmation" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="reset-password-confirm" tabindex="2" />
                                             <span class="input-group-text cursor-pointer"><i data-feather="eye"></i></span>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary w-100" tabindex="3">Set New Password</button>
+                                    <button id="resetSubmitBtn" class="btn btn-primary w-100" tabindex="3">Set New Password</button>
                                 </form>
 
                                 <p class="text-center mt-2">
@@ -125,6 +128,69 @@
     <!-- END: Page JS-->
 
     <script>
+document.getElementById('resetForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const password = document.getElementById('reset-password-new').value.trim();
+    const confirmPassword = document.getElementById('reset-password-confirm').value.trim();
+
+    if (!password || !confirmPassword) {
+        Swal.fire({ icon: 'warning', text: 'Both password fields are required.' });
+        return;
+    }
+
+    if (password.length < 8) {
+        Swal.fire({ icon: 'warning', text: 'Password must be at least 8 characters.' });
+        return;
+    }
+
+    const button = document.getElementById('resetSubmitBtn');
+    const originalText = button.innerHTML;
+    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...`;
+    button.disabled = true;
+
+    fetch("{{ route('password.reset') }}", {
+        method: "POST",
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('[name=_token]').value,
+            'Accept': 'application/json'
+        },
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) throw response;
+        return response.json();
+    })
+    .then(data => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Password reset successful!'
+        }).then(() => {
+            window.location.href = "{{ route('login') }}";
+        });
+    })
+    .catch(async error => {
+        const res = await error.json();
+        let message = 'Reset failed. Please try again.';
+        if (res?.errors) {
+            message = Object.values(res.errors).flat().join('\n');
+        }
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message
+        });
+    })
+    .finally(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+});
+
         $(window).on('load', function() {
             if (feather) {
                 feather.replace({
@@ -134,6 +200,7 @@
             }
         })
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 <!-- END: Body-->
 

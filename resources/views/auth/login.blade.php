@@ -71,7 +71,8 @@
                                 <h4 class="card-title mb-1">Welcome to OneBase! 👋</h4>
                                 <p class="card-text mb-2">Please sign-in to your account and start the adventure</p>
 
-                                <form class="auth-login-form mt-2" action="index.html" method="POST">
+                                <form class="auth-login-form mt-2" id="loginForm">
+                                    @csrf
                                     <div class="mb-1">
                                         <label for="login-email" class="form-label">Email</label>
                                         <input type="text" class="form-control" id="login-email" name="login-email" placeholder="john@example.com" aria-describedby="login-email" tabindex="1" autofocus />
@@ -132,11 +133,22 @@
             </div>
         </div>
     </div>
+    @if ($errors->any())
+    <div class="alert alert-danger mt-1">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
     <!-- END: Content-->
 
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset('/app-assets/vendors/js/vendors.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
@@ -153,6 +165,60 @@
     <!-- END: Page JS-->
 
     <script>
+   $('#loginForm').submit(function (e) {
+    e.preventDefault();
+
+    let form = $(this);
+    let email = $('#login-email').val();
+    let password = $('#login-password').val();
+    let token = $('input[name="_token"]').val();
+
+    $.ajax({
+        url: "{{ route('login.perform') }}",
+        type: "POST",
+        data: {
+            _token: token,
+            email: email,
+            password: password
+        },
+        success: function (response) {
+            // Optional: Swal for success
+            Swal.fire({
+                title: 'Success',
+                text: 'Login successful!',
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = "{{ route('dashboard') }}";
+            });
+        },
+        error: function (xhr) {
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                let msg = '';
+
+                $.each(errors, function (key, value) {
+                    msg += value[0] + '<br>';
+                });
+
+                Swal.fire({
+                    title: 'Validation Error',
+                    html: msg,
+                    icon: 'error'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Login Failed',
+                    text: 'Invalid login or unexpected error occurred.',
+                    icon: 'error'
+                });
+            }
+        }
+    });
+});
+
+
         $(window).on('load', function() {
             if (feather) {
                 feather.replace({

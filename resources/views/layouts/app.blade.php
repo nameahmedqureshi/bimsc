@@ -12,7 +12,7 @@
 <body class="vertical-layout vertical-menu-modern 2-columns">
 
     @include('includes.header')
-    @include('includes.manu')
+    @include('includes.menu')
 
     <div class="app-content content">
         <div class="content-overlay"></div>

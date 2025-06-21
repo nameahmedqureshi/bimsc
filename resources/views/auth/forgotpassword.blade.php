@@ -70,12 +70,13 @@
                                 <h4 class="card-title mb-1">Forgot Password? 🔒</h4>
                                 <p class="card-text mb-2">Enter your email and we'll send you instructions to reset your password</p>
 
-                                <form class="auth-forgot-password-form mt-2" action="auth-reset-password-basic.html" method="POST">
+                                <form class="auth-form mt-2" id="forgotForm" method="POST">
+                                    @csrf
                                     <div class="mb-1">
-                                        <label for="forgot-password-email" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="forgot-password-email" name="forgot-password-email" placeholder="john@example.com" aria-describedby="forgot-password-email" tabindex="1" autofocus />
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="text" class="form-control" id="email" name="email" placeholder="john@example.com" aria-describedby="email" tabindex="1" autofocus />
                                     </div>
-                                    <button class="btn btn-primary w-100" tabindex="2">Send reset link</button>
+                                    <button id="forgotSubmitBtn" class="btn btn-primary w-100" tabindex="2">Send reset link</button>
                                 </form>
 
                                 <p class="text-center mt-2">
@@ -111,6 +112,68 @@
     <!-- END: Page JS-->
 
     <script>
+document.addEventListener('DOMContentLoaded', function () {
+document.getElementById('forgotForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const button = document.getElementById('forgotSubmitBtn');
+    const originalText = button.innerHTML;
+    if (!email) {
+    Swal.fire({ icon: 'warning', text: 'Email is required!' });
+    button.innerHTML = originalText;
+    button.disabled = false;
+    return;
+    }
+
+    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...`;
+    button.disabled = true;
+
+    fetch("{{ route('password.update') }}", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('[name=_token]').value,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ email })
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw errorData;
+        }
+        return response.json();
+    })
+    .then(data => {
+        Swal.fire({
+            title: 'Success',
+            text: data.message || 'Reset link sent to your email!',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then(() => {
+                window.location.href = "{{ route('login') }}";
+        });
+    })
+    .catch(error => {
+        let message = 'Something went wrong.';
+        if (error?.errors?.email) {
+            message = error.errors.email[0];
+        }
+        Swal.fire({
+            title: 'Error',
+            text: message,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        })
+    .finally(() => {
+        // Restore button state
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+});
+});
         $(window).on('load', function() {
             if (feather) {
                 feather.replace({
@@ -120,7 +183,6 @@
             }
         })
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
-<!-- END: Body-->
-
 </html>

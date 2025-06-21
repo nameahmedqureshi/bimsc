@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Blogs')
+@section('title', 'Users')
 @section('page-styles')
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -58,37 +58,41 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>#5089</td>
-                                            <td>
-                                                <div class="d-flex justify-content-left align-items-center">
-                                                    <div class="avatar bg-light-primary me-1">
-                                                        <span class="avatar-content">AB</span>
-                                                    </div>
-                                                    <div class="d-flex flex-column">
-                                                        <span class="fw-bold">Apple Brothers</span>
-                                                        <small class="text-muted">apple@example.com</small>
-                                                    </div>
+                                    @foreach($users as $user)
+                                    <tr>
+                                        <td>#{{ $user->id }}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-left align-items-center">
+                                                <div class="avatar bg-light-primary me-1">
+                                                    <span class="avatar-content">{{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}</span>
                                                 </div>
-                                            </td>
-                                            <td>Client</td>
-                                            <td>15 Jan 2023</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <a href="{{ route('admin.user.edit', 1) }}" class="text-body">
-                                                        <i data-feather="edit" class="mx-1"></i>
-                                                    </a>
-                                                    <form action="{{ route('admin.user.destroy', 1) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-link text-body p-0" onclick="return confirm('Are you sure?')">
-                                                            <i data-feather="trash"></i>
-                                                        </button>
-                                                    </form>
+                                                <div class="d-flex flex-column">
+                                                    <span class="fw-bold">{{ $user->first_name }} {{ $user->last_name }}</span>
+                                                    <small class="text-muted">{{ $user->email }}</small>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                                            </div>
+                                        </td>
+                                        <td>{{ ucfirst($user->role) }}</td>
+                                        <td>{{ $user->created_at->format('d M Y') }}</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <a href="{{ route('admin.user.edit', $user->id) }}" class="text-body">
+                                                    <i data-feather="edit" class="mx-1"></i>
+                                                </a>
+                                               <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" class="d-inline delete-user-form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-link text-body p-0 btn-delete-user" data-user-id="{{ $user->id }}">
+                                                    <i data-feather="trash"></i>
+                                                </button>
+                                            </form>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -151,6 +155,25 @@
             $(location).prop('href', "{{ route('admin.user.create') }}");
         });
         var table = $('.datatables-basic').DataTable(tableConfig);
+
+    $(document).on('click', '.btn-delete-user', function (e) {
+        e.preventDefault();
+        const form = $(this).closest('form');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // submit the actual form
+            }
+        });
+    });
 
     </script>
 @endsection

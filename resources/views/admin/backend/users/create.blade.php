@@ -69,12 +69,21 @@
                                             <select class="form-select" id="status" name="user_role" required>
                                                 <option selected disabled>Select Role</option>
                                                 <option value="client">Client</option>
-                                                <option value="team-member">Team Member</option>
+                                                <option value="team">Team Member</option>
                                             </select>
 
                                         </div>
                                     </div>
-
+                                    <div class="col-md-6 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" for="status">Status</label>
+                                            <select class="form-select" id="status" name="status" required>
+                                                <option selected disabled>Select Status</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-md-6 col-12">
                                         <label class="form-label" for="password">Password</label>
 
@@ -108,6 +117,7 @@
             </div>
         </section>
     </div>
+
 @endsection
 @section('page-scripts')
 
@@ -116,7 +126,7 @@
         $("#userForm").submit(function(e) {
             e.preventDefault(); // avoid to execute the actual submit of the form.
             var form = new FormData(this);
-            const url = `/store`;
+            const url = `/admin/users`;
 
             // console.log('form', form);
             $(this).find('button[type=submit]').append('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');
@@ -168,10 +178,37 @@
                         
                         } 
                 },
-                error: function(errorThrown) {
-                    console.log(errorThrown);
-                    $('body').waitMe('hide');
+                error: function(xhr) {
+                $('.fa.fa-spinner.fa-spin').remove();
+                $('body').waitMe('hide');
+                $(thiss).find('button[type=submit]').prop('disabled', false);
+
+                if (xhr.status === 422) {
+                    // Validation error
+                    let response = xhr.responseJSON;
+                    let errors = response.errors;
+
+                    let errorHtml = '<ul>';
+                    $.each(errors, function(key, value) {
+                        errorHtml += '<li>' + value[0] + '</li>';
+                    });
+                    errorHtml += '</ul>';
+
+                    Swal.fire({
+                        title: 'Validation Error',
+                        html: errorHtml,
+                        icon: 'error'
+                    });
+                } else {
+                    // Generic error
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An unexpected error occurred.',
+                        icon: 'error'
+                    });
                 }
+            }
+
             });
         });
     </script>

@@ -36,14 +36,16 @@
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
 
             <li class="nav-item"><a class="d-flex align-items-center" href="{{ route('dashboard') }}"><i data-feather="home"></i><span class="menu-title text-truncate" data-i18n="Dashboard">Dashboard</span></a></li>
-
+            @auth
+             @if(auth()->user()->role === 'admin')
             <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='users'></i><span class="menu-title text-truncate" data-i18n="Users">Users</span></a>
                 <ul class="menu-content">
                     <li class="d-flex align-items-center"><a class="d-flex align-items-center" href="{{ route('admin.user.create') }}"><i data-feather='circle'></i><span class="menu-item text-truncate" data-i18n="Add New User ">Add New User </span></a></li>
                     <li class="d-flex align-items-center"><a class="d-flex align-items-center" href="{{ route('admin.user.index') }}"><i data-feather='circle'></i><span class="menu-item text-truncate" data-i18n="All Users ">All Users </span></a></li>
                 </ul>
             </li>
-
+               @endif
+                @endauth
            
         </ul>
     </div>

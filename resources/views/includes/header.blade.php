@@ -30,7 +30,7 @@
             
             
             <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <div class="user-nav d-sm-flex d-none"><span class="user-name fw-bolder">Admin</span></div><span class="avatar"><img class="round" src="{{ asset('/assets/images/avatar.png ') }}" alt="avatar" height="40" width="40"><span class="avatar-status-online"></span></span>
+                    <div class="user-nav d-sm-flex d-none"><span class="user-name fw-bolder">{{ ucfirst(auth()->user()->first_name) }}</span></div><span class="avatar"><img class="round" src="{{ asset('/assets/images/avatar.png ') }}" alt="avatar" height="40" width="40"><span class="avatar-status-online"></span></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
                     
@@ -38,7 +38,7 @@
                         <i class="me-50" data-feather="settings"></i> 
                         Settings
                     </a> -->
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="dropdown-item logout" style="background: none; border: none; padding: 0; margin: 0;">
                             <i class="me-50" data-feather="power"></i> Logout

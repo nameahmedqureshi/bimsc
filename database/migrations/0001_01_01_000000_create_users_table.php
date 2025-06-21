@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('image')->default('backend/image/default-user.png');
-            $table->enum('role', ['client', 'team'])->default('team');
+            $table->enum('role', ['client', 'team','admin'])->default('team');
             $table->boolean('status')->default(true);
             $table->rememberToken();
             $table->timestamps();
