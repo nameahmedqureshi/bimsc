@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Package')
 @section('page-styles')
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -36,44 +36,38 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form id="userForm" class="form form-vertical" enctype="multipart/form-data" method="POST">
+                            <form id="packageForm" class="form form-vertical" enctype="multipart/form-data" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6  col-12">
                                         <div class="mb-1">
-                                            <label class="form-label" for="title">First Name</label>
-                                            <input type="text" id="f-name" class="form-control" value="" name="f_name" placeholder="First Name" />
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="col-md-6 mb-1">
-                                        <div class="mb-1">
-                                            <label class="form-label" for="title">Last Name</label>
-                                            <input type="text" id="l-name" class="form-control" value="" name="l_name" placeholder="Last Name" />
-
+                                            <label class="form-label" for="title">Title</label>
+                                            <input type="text" id="title" class="form-control" value="" name="title" placeholder="Title" />
                                         </div>
                                     </div>
 
                                     <div class="col-md-6 mb-1">
                                         <div class="mb-1">
-                                            <label for="login-email" class="form-label">Email</label>
-                                            <input type="email" class="form-control" value="" id="login-email" name="user_email" placeholder="john@example.com" />
+                                            <label class="form-label" for="project_limit">Project Limit</label>
+                                            <input type="number" id="project_limit" class="form-control" value="" name="project_limit" placeholder="Project Limit" />
+
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-6 mb-1">
                                         <div class="mb-1">
-                                            <label class="form-label" for="status">Role</label>
-                                            <select class="form-select" id="status" name="user_role" required>
-                                                <option selected disabled>Select Role</option>
-                                                <option value="client">Client</option>
-                                                <option value="team">Team Member</option>
-                                            </select>
-
+                                            <label class="form-label" for="task_limit_per_project">Task Limit Per Project</label>
+                                            <input type="number" id="task_limit_per_project" class="form-control" value="" name="task_limit_per_project" placeholder="Task Limit Per Project" />
                                         </div>
                                     </div>
+                                     <div class="col-md-6">
+                                    <label class="form-label">Price</label>
+                                    <div class="input-group mb-1">
+                                            <span class="input-group-text">$</span>
+                                            <input type="text" class="form-control" name="price" id="price" placeholder="100" value="" aria-label="Amount (to the nearest dollar)">
+                                            <span class="input-group-text">.00</span>
+                                        </div>                          
+                                    </div>     
                                     <!-- <div class="col-md-6 col-12">
                                         <div class="mb-1">
                                             <label class="form-label" for="status">Status</label>
@@ -105,10 +99,10 @@
 
     <script>
 
-        $("#userForm").submit(function(e) {
+        $("#packageForm").submit(function(e) {
             e.preventDefault(); // avoid to execute the actual submit of the form.
             var form = new FormData(this);
-            const url = `/admin/users`;
+            const url = `/admin/packages`;
 
             // console.log('form', form);
             $(this).find('button[type=submit]').append('<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>');

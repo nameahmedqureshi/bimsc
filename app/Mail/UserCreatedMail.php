@@ -3,24 +3,22 @@
 namespace App\Mail;
 
 use App\Models\User;
-use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Queue\SerializesModels;
 
 class UserCreatedMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    public $user;
+    public $resetUrl;
 
-    public $user; // Public so it can be used in the view
-
-    public function __construct(User $user)
+    public function __construct(User $user, $resetUrl)
     {
         $this->user = $user;
+        $this->resetUrl = $resetUrl;
     }
 
     public function build()
     {
-        return $this->subject('Welcome to Our Platform')
+        return $this->subject('Welcome! Set Your Password')
                     ->view('emails.user-created');
     }
 }

@@ -80,7 +80,7 @@
                                 </form>
 
                                 <p class="text-center mt-2">
-                                    <a href="auth-login-basic.html"> <i data-feather="chevron-left"></i> Back to login </a>
+                                    <a href="login"> <i data-feather="chevron-left"></i> Back to login </a>
                                 </p>
                             </div>
                         </div>

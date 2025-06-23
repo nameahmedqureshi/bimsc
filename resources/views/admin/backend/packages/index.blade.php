@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Packages')
 @section('page-styles')
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
@@ -51,47 +51,38 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Role</th>
-                                            <th>Status</th>
+                                            <th>Title</th>
+                                            <th>Project Limit</th>
+                                            <th>Task Limit per Project</th>
+                                            <th>Price</th>
                                             <th>Created at</th>
                                             <th class="cell-fit">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach($users as $user)
+                                    @foreach($packages as $package)
                                     <tr>
                                         <td>#{{ $loop->iteration }}</td>
                                         <td>
                                             <div class="d-flex justify-content-left align-items-center">
                                                 <div class="avatar bg-light-primary me-1">
-                                                    <span class="avatar-content">{{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}</span>
-                                                </div>
-                                                <div class="d-flex flex-column">
-                                                    <span class="fw-bold">{{ $user->first_name }} {{ $user->last_name }}</span>
-                                                    <small class="text-muted">{{ $user->email }}</small>
+                                                    <span class="avatar-content">{{ strtoupper(substr($package->title, 0, 1)) }}</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ ucfirst($user->role) }}</td>
-                                        <td><div class="d-flex flex-column">
-                                            <div class="form-check form-check-primary form-switch">
-                                                <input type="checkbox" class="form-check-input" id="customSwitch3" {{ $user->status === 1 ? 'checked' : '' }} onchange="toggleUserStatus({{ $user->id }}, this.checked)">
-                                            </div>
-                                        </div></td>
-                                        <td>{{ $user->created_at->format('d M Y') }}</td>
+                                        <td>{{ $package->project_limit }}</td>
+                                        <td>{{ $package->task_limit_per_project }}</td>
+                                        <td>{{ $package->price }}</td>
+                                        <td>{{ $package->created_at->format('d M Y') }}</td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="{{ route('admin.user.edit', $user->id) }}" class="text-body">
+                                                <a href="{{ route('admin.packages.edit', $package->id) }}" class="text-body">
                                                     <i data-feather="edit" class="mx-25"></i>
                                                 </a>
-                                                <button type="button" class="btn btn-link text-body p-0 btn-reset-link" data-user-id="{{ $user->id }}" title="Send Reset Link">
-                                                <i data-feather="send" class="mx-25"></i>
-                                                </button>
-                                               <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" class="d-inline delete-user-form">
+                                               <form action="{{ route('admin.packages.destroy', $package->id) }}" method="POST" class="d-inline delete-package-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="button" class="btn btn-link text-body p-0 btn-delete-user" data-user-id="{{ $user->id }}">
+                                                <button type="button" class="btn btn-link text-body p-0 btn-delete-package" data-package-id="{{ $package->id }}">
                                                     <i data-feather="trash" class="mx-25"></i>
                                                 </button>
                                             </form>                                            
@@ -130,63 +121,6 @@
     <script src="{{ asset('/app-assets/vendors/js/tables/datatable/buttons.html5.min.js') }}"></script>
     <!-- END: Page JS-->
     <script>
-function toggleUserStatus(userId, status) {
-    // Start loading
-    $('body').waitMe({
-        effect: 'bounce',
-        text: '',
-        bg: 'rgba(255,255,255,0.7)',
-        color: '#000',
-        maxSize: '',
-        waitTime: -1,
-        textPos: 'vertical',
-        fontSize: '',
-        source: '',
-    });
-
-    $.ajax({
-        type: 'POST',
-        url: `/admin/user/toggle-status/${userId}`,
-        data: {
-            status: status,
-            _token: $('meta[name="csrf-token"]').attr('content') // Make sure CSRF token is available
-        },
-        success: function(response) {
-            $('body').waitMe('hide');
-            Swal.fire({
-                title: 'Success',
-                text: response.message,
-                icon: 'success'
-            });
-        },
-        error: function(xhr) {
-            $('body').waitMe('hide');
-
-            if (xhr.status === 422) {
-                let response = xhr.responseJSON;
-                let errors = response.errors;
-
-                let errorHtml = '<ul>';
-                $.each(errors, function(key, value) {
-                    errorHtml += '<li>' + value[0] + '</li>';
-                });
-                errorHtml += '</ul>';
-
-                Swal.fire({
-                    title: 'Validation Error',
-                    html: errorHtml,
-                    icon: 'error'
-                });
-            } else {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'An unexpected error occurred while updating status.',
-                    icon: 'error'
-                         });
-                    }
-                           }
-        });
-                                }
          var tableConfig = {
             order: [[0, 'desc']],
             dom:
@@ -203,7 +137,7 @@ function toggleUserStatus(userId, status) {
                 'csvHtml5',
                 'pdfHtml5'
             ]
-};
+                        };
 
         tableConfig.buttons.push({
             text: 'Add New',
@@ -216,52 +150,14 @@ function toggleUserStatus(userId, status) {
                 $(node).removeClass('btn-secondary');
             }
         });
-        $(document).on('click', '.btn-reset-link', function () {
-        const userId = $(this).data('user-id');
-
-        Swal.fire({
-            title: 'Send Reset Link?',
-            text: "A password reset email will be sent to the user.",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, send it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('body').waitMe({ effect: 'bounce', bg: 'rgba(255,255,255,0.7)', color: '#000' });
-
-                $.ajax({
-                    type: 'POST',
-                    url: `/admin/user/send-reset-link/${userId}`,
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function (response) {
-                        $('body').waitMe('hide');
-                        Swal.fire({
-                            title: response.status ? 'Success' : 'Error',
-                            text: response.message,
-                            icon: response.icon
-                        });
-                    },
-                    error: function () {
-                        $('body').waitMe('hide');
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'Something went wrong while sending the reset link.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-        });
-        });
+        
 
         $(document).on("click",".add-new",function() {
-            $(location).prop('href', "{{ route('admin.user.create') }}");
+            $(location).prop('href', "{{ route('admin.packages.create') }}");
         });
         var table = $('.datatables-basic').DataTable(tableConfig);
 
-    $(document).on('click', '.btn-delete-user', function (e) {
+    $(document).on('click', '.btn-delete-package', function (e) {
         e.preventDefault();
         const form = $(this).closest('form');
 

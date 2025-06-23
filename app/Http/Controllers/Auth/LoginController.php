@@ -22,11 +22,22 @@ class LoginController extends Controller
             ]);
         }
 
+        // Check if the authenticated user is active
+        // $user = Auth::user();
+        // if ($user->status !== '1') {
+        //     Auth::logout(); // log out the user just in case they were logged in
+
+        //     throw ValidationException::withMessages([
+        //         'email' => ['Your account is not active. Please contact support.'],
+        //     ]);
+        // }
+
         return response()->json([
             'message' => 'Login successful',
             'redirect' => route('dashboard')
         ]);
     }
+
     public function logout(Request $request)
     {
         Auth::logout();

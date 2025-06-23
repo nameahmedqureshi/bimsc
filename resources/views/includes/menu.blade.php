@@ -44,6 +44,12 @@
                     <li class="d-flex align-items-center"><a class="d-flex align-items-center" href="{{ route('admin.user.index') }}"><i data-feather='circle'></i><span class="menu-item text-truncate" data-i18n="All Users ">All Users </span></a></li>
                 </ul>
             </li>
+            <li class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='package'></i><span class="menu-title text-truncate" data-i18n="Packages">Packages</span></a>
+                <ul class="menu-content">
+                    <li class="d-flex align-items-center"><a class="d-flex align-items-center" href="{{ route('admin.packages.create') }}"><i data-feather='circle'></i><span class="menu-item text-truncate" data-i18n="Add New User ">Add New Package </span></a></li>
+                    <li class="d-flex align-items-center"><a class="d-flex align-items-center" href="{{ route('admin.packages.index') }}"><i data-feather='circle'></i><span class="menu-item text-truncate" data-i18n="All Packages">All Packages </span></a></li>
+                </ul>
+            </li>
                @endif
                 @endauth
            

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -58,6 +59,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
     // List all users
     Route::get('/users', [UsersController::class, 'index'])->name('user.index');
+    Route::post('/user/toggle-status/{id}', [UsersController::class, 'toggleStatus'])->name('admin.user.toggleStatus');
+    Route::post('/user/send-reset-link/{id}', [UsersController::class, 'sendResetLink'])
+    ->name('admin.user.sendResetLink');
 
     // Show create form
     Route::get('/users/create', [UsersController::class, 'create'])->name('user.create');
@@ -73,6 +77,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // Delete users
     Route::delete('/users/{id}', [UsersController::class, 'destroy'])->name('user.destroy');
+    // packages 
+    Route::resource('/packages', PackageController::class)->names('packages');
+
 
 });
 });
